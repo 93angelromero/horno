@@ -27,7 +27,7 @@ function login(){
          var datos = data.toString().split(",");
          user = datos[0];
          usi = datos[1];
-         //per = datos[3];
+         per = datos[3];
          //$(".usern").text(user);
          localStorage.setItem("user",user);
          localStorage.setItem("usi",usi);
