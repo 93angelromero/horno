@@ -1,51 +1,138 @@
-
 if(localStorage.getItem("user")!=null){
-    if(localStorage.getItem("tipo")=="adm"){
-        $.mobile.navigate( "#menu", {transition:"pop" });
-    }else if(localStorage.getItem("tipo")=="esc"){
-        $.mobile.navigate( "#menuD", {transition:"pop" });
-     } else{
-         $.mobile.navigate( "#menuL", {transition:"pop" });
+  if(localStorage.getItem("tipo")=="adm"){
+    $.mobile.navigate( "#menu", {transition:"pop" });
+  }else if(localStorage.getItem("tipo")=="esc"){
+    $.mobile.navigate( "#menuD", {transition:"pop" });
+  } else {
+    $.mobile.navigate( "#menuL", {transition:"pop" });
+  }
+}
+
+//funcion inicio de sesión
+function login(){
+  var form = new FormData($("#loginForm")[0]);
+  //form.append("regID",localStorage.getItem('registrationId'));
+  $.ajax({
+     url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+     type: "POST",
+     data: form,
+     contentType: false,
+     cache: false,
+     processData:false,
+     error: function(xhr, settings, exception){ swal("Error","Revisa tu conexión a internet.","error")},
+     success: function(data){
+       $.mobile.loading( "hide" );
+       //$("#logac").prop("disabled",false);
+       if(data.toString()!=="0"){
+         var datos = data.toString().split(",");
+         user = datos[0];
+         usi = datos[1];
+         //per = datos[3];
+         //$(".usern").text(user);
+         localStorage.setItem("user",user);
+         localStorage.setItem("usi",usi);
+         if($("#tipoL").val()=="1"){
+           localStorage.setItem("tipo","adm");
+           $.mobile.navigate( "#menu", { transition : "slide",info: "info about the #foo hash" });
+         }else if($("#tipoL").val()=="2"){
+           localStorage.setItem("tipo","esc");
+           $.mobile.navigate( "#menuD", { transition : "slide",info: "info about the #foo hash" });
+         } else if($("#tipoL").val()=="3"){
+           localStorage.setItem("tipo","lec");
+           $.mobile.navigate( "#menuL", { transition : "slide",info: "info about the #foo hash" });
+         }
+       } else{
+         swal("Error","Usuario o contraseña incorrectos","error");
+       }
+     },
+     error: function(){
+       $.mobile.loading( "hide");
+       swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
      }
+   });
 }
 
-
-
-Conekta.setPublicKey('key_BpifLpJUQoudFUeD45P8HCw');
-Conekta.setLanguage("es");
-function checkC(){
-	var $form = $("#payForm");
-    $form.find("button").prop("disabled", true);
-    Conekta.Token.create($form, conektaSuccessResponseHandler, conektaErrorResponseHandler);
-
-
+//función agregar usuarios a BD
+function updateD(){
+  var form = new FormData($("#datosForm")[0]);
+  //form.append("userm",localStorage.getItem("usi"));
+  $.ajax({
+    url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+    type: "POST",
+    data: form,
+    contentType: false,
+    cache: false,
+    processData:false,
+    success: function(data){
+      if(data.toString()=="0"){
+        $("#datosForm").reset();
+        swal("Listo","Tus datos han sido guardados.","success");
+      } else {
+        swal("Error","No se han podido guardar tus datos, revisa tu conexión e intentalo de nuevo","error");
+      }
+    },
+    error: function(){
+      swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
+    }
+  });
 }
- var conektaSuccessResponseHandler = function(token) {
 
-    var $form = $("#payForm");
-    //Inserta el token_id en la forma para que se envíe al servidor
-    $form.append($("<input type='hidden' name='conektaTokenId' id='conektaTokenId'>").val(token.id));
-    pay("#regFormP");
+//función agregar estados a BD
+function updateDD(){
+  var form = new FormData($("#datosdForm")[0]);
+  form.append("userm",localStorage.getItem("usi"));
+  $.ajax({
+    url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+    type: "POST",
+    data: form,
+    contentType: false,
+    cache: false,
+    processData:false,
+    success: function(data){
+      if(data.toString()=="0"){
+        swal("Listo","Tus datos han sido modificados.","success");
+      } else{
+        //swal("Error","No se han podido modificar tus datos, revisa tu conexión e intentalo de nuevo","error");
+        swal("Error",data.toString(),"error");
+      }
+    },
+    error: function(){
+      swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
+    }
+  });
+}
 
+//función subir archivo a Estados
+function subirAE(){
+  var form = new FormData($("#archivoeForm")[0]);
+  //form.append("userm",localStorage.getItem("usi"));
+  $.ajax({
+    url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+    type: "POST",
+    data: form,
+    contentType: false,
+    cache: false,
+    processData:false,
+    success: function(data){
+      if(data.toString()=="0"){
+        swal("Listo","Tu archivo ha sido subido con éxito.","success");
+      } else{
+        //swal("Error","No se han podido modificar tus datos, revisa tu conexión e intentalo de nuevo","error");
+        swal("Error",data.toString(),"error");
+      }
+    },
+    error: function(){
+      swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
+    }
+  });
+}
 
-  };
-  var conektaErrorResponseHandler = function(response) {
-  var $form = $("#payForm");
-    $form.find("button").prop("disabled", false);
+var datesArray= Array();
+var calendar="";
+function getPac(){
+  html = $("body").jqmData( "html" ) || "";
 
-  	swal("Error",response.message_to_purchaser,"error");
-
-
-    var $form = $("#payForm");
-
-
-  };
-    var datesArray= Array();
-    var calendar="";
-    function getPac(){
-    	html = $("body").jqmData( "html" ) || "";
-
-   	var idu = localStorage.getItem("usi");
+ 	var idu = localStorage.getItem("usi");
  	$.ajax({
 	url: "http://www.icone-solutions.com/doct/sqlOP.php",
 	type: "POST",
@@ -157,7 +244,7 @@ function checkC(){
      	var datat =localStorage.getItem("tipo");
 
  	    $.ajax({
-      	url: "http://www.icone-solutions.com/tesisL/sqlOP.php",
+      	url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
       	type: "POST",
       	data: {idu:idu,datat:datat},
       	success: function(data){
@@ -168,7 +255,7 @@ function checkC(){
           	'<span class="dname">'+obj[i][0]+'</span>'+
           	'<span class="scp">'+obj[i][1]+'</span>'+
           	'</a>'+
-          	'</li>');
+          	'</li>')
           }
 
     	},
@@ -220,7 +307,7 @@ function checkC(){
 		var obj= jQuery.parseJSON(data);
 		for(var i=0;i< obj.length;i++){
 
-			var color ="";
+			var color =""
 			var color2 ="";
 			if(obj[i][6]=="Liberado"){
 				color = "blueb";
@@ -574,65 +661,12 @@ $('#modalD').iziModal('open');
 
         });
     }
-    function updateD(){
-    var form = new FormData($("#datosForm")[0]);
-    //form.append("userm",localStorage.getItem("usi"));
-    $.ajax({
-	url: "http://www.icone-solutions.com/tesisL/sqlOP.php",
-	type: "POST",
-	data: form,
-	contentType: false,
-	cache: false,
-	processData:false,
-	success: function(data){
-	    if(data.toString()=="0"){
-                $("#datosForm").reset();
-                swal("Listo","Tus datos han sido guardados.","success");
-	    }else{
-
-
-
-           swal("Error","No se han podido guardar tus datos, revisa tu conexión e intentalo de nuevo","error");
-	    }
-
-	},
-
-	error: function(){
-		swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
-	}
-
-        });
-    }
-
-    function updateDD(){
-        var form = new FormData($("#datosdForm")[0]);
-        form.append("userm",localStorage.getItem("usi"));
-        $.ajax({
-            url: "http://www.icone-solutions.com/tesisL/sqlOP.php",
-            type: "POST",
-            data: form,
-            contentType: false,
-            cache: false,
-            processData:false,
-            success: function(data){
-                if(data.toString()=="0"){
-                    swal("Listo","Tus datos han sido modificados.","success");
-                }else{
-	    	    //swal("Error","No se han podido modificar tus datos, revisa tu conexión e intentalo de nuevo","error");
-                    swal("Error",data.toString(),"error");
-                }
-            },
-            error: function(){
-		swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
-            }
-        });
-    }
 
     function updateDE(){
         var form = new FormData($("#datoseForm")[0]);
         form.append("userm",localStorage.getItem("usi"));
         $.ajax({
-            url: "http://www.icone-solutions.com/tesisL/sqlOP.php",
+            url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
             type: "POST",
             data: form,
             contentType: false,
@@ -713,61 +747,7 @@ $('#modalD').iziModal('open');
         }
       });
   }
-   function login(){
 
-    var form = new FormData($("#loginForm")[0]);
-
-    //form.append("regID",localStorage.getItem('registrationId'));
-     $.ajax({
-        url: "http://www.icone-solutions.com/tesisL/sqlOP.php",
-        type: "POST",
-        data: form,
-        contentType: false,
-        cache: false,
-        processData:false,
-        error: function(xhr, settings, exception){ swal("Error","Revisa tu conexión a internet.","error")},
-        success: function(data){
-          $.mobile.loading( "hide" );
-          //$("#logac").prop("disabled",false);
-          if(data.toString()!=="0"){
-            var datos = data.toString().split(",");
-            user = datos[0];
-            usi = datos[1];
-            per = datos[3];
-            //$(".usern").text(user);
-            localStorage.setItem("user",user);
-            localStorage.setItem("usi",usi);
-            if($("#tipoL").val()=="1"){
-            	localStorage.setItem("tipo","adm");
-            	$.mobile.navigate( "#menu", { transition : "slide",info: "info about the #foo hash" });
-            }else if($("#tipoL").val()=="2"){
-            	localStorage.setItem("tipo","esc");
-            	$.mobile.navigate( "#menuD", { transition : "slide",info: "info about the #foo hash" });
-            } else if($("#tipoL").val()=="3"){
-            	localStorage.setItem("tipo","lec");
-            	$.mobile.navigate( "#menuL", { transition : "slide",info: "info about the #foo hash" });
-            }
-            /*if(per=="1"){
-            	localStorage.setItem("tipo","adm");
-            	$.mobile.navigate( "#menu", { transition : "slide",info: "info about the #foo hash" });
-            }else if(per=="2"){
-            	localStorage.setItem("tipo","esc");
-            	$.mobile.navigate( "#menuD", { transition : "slide",info: "info about the #foo hash" });
-            } else if(per=="3"){
-                localStorage.setItem("tipo","lec");
-            	$.mobile.navigate( "#menuL", { transition : "slide",info: "info about the #foo hash" });
-            }*/
-
-          } else{
-            swal("Error","Usuario o contraseña incorrectos","error");
-          }
-        },
-      error: function(){
-      	 $.mobile.loading( "hide");
-        swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
-      }
-    });
-    }
 
 	/*function register(){
     	var form = new FormData($("#regForm")[0]);
@@ -876,6 +856,140 @@ $('#modalD').iziModal('open');
     }
 
 $(document).ready(function(){
+  //inicio de sesiones
+  $('#loginForm').submit(function(e){
+    e.preventDefault();
+    html = $(this).jqmData( "html" ) || "";
+    var form = new FormData($("#loginForm")[0]);
+    $.mobile.loading( "show", {
+      text: "Verificando",
+      textVisible: true,
+      theme: "b",
+      textonly: false,
+      html: html
+    });
+    login();
+    //form.append("regID",localStorage.getItem('registrationId'));
+  });
+
+  //agregar Usuarios
+  $("#datosForm").submit(function(e){
+    e.preventDefault();
+    if(validaP()){
+      swal({
+        title: "¿Estás seguro que tus datos son correctos?",
+        text: "",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Aceptar",
+        showLoaderOnConfirm: true,
+        closeOnConfirm: false,
+        cancelButtonText: "Cancelar",
+      },
+      function(isConfirm){
+          if(isConfirm){
+             updateD();
+          }
+      });
+    }
+  });
+
+  //validación de campos
+  function validaP(){
+      if($('#nombreU').val()==''){
+          swal("Error","El nombre no puede estar vacío.","error");
+      } else if($('#mailU').val()==''){
+          swal("Error","El correo no puede estar vacío.","error");
+      } else if($('#telU').val()==''){
+          swal("Error","El telefono no puede estar vacío.","error");
+      } else{
+          return true;
+      }
+  }
+
+  //Mostrar datos de los usuarios en Base de Datos
+  $("#usersL").click(function(e){
+    e.preventDefault();
+  	html = $(this).jqmData( "html" ) || "";
+    $.mobile.loading( "show", {
+      text: "Cargando Lista",
+      textVisible: true,
+      theme: "b",
+      textonly: false,
+      html: html
+    });
+	  $.ajax({
+      url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+   	  type: "POST",
+  	  data: {users:1},
+   	  success: function(data){
+        $("#usersUl").empty();
+     		var users = jQuery.parseJSON(data);
+     		for(var i=0;users.length;i++){
+          $("#usersUl").append(' <li><a class="showD" data-doct="'+docts[i][3]+'">'+
+          '<span class="dname">'+docts[i][0]+'</span>'+
+          '<span class="scp">'+docts[i][1]+'</span>'+
+          '<span class="scp">Permiso'+docts[i][2]+'</span>'+
+          '</a>'+
+          '</li>')
+     		}
+ 	      if ($("#usersUl").hasClass('ui-listview')) {
+          $("#usersUl").listview('refresh');
+        }
+ 	      $.mobile.loading( "hide");
+ 	      $.mobile.navigate( "#verU", {transition:"slide" });
+      }
+ 	  });
+  });
+
+  //modificar usuarios
+
+
+  //agregar estados a BD
+  $("#datosdForm").submit(function(e){
+    e.preventDefault();
+    if(validac()){
+      swal({
+        title: "¿Estás seguro que tus datos son correctos?",
+        text: "",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Aceptar",
+        showLoaderOnConfirm: true,
+        closeOnConfirm: false,
+        cancelButtonText: "Cancelar",
+      },
+      function(isConfirm){
+        if(isConfirm){
+          updateDD();
+        }
+      });
+    }
+  });
+
+  //agregar archivos de estados a BD
+  $('#archivoeForm').submit(funtion(e){
+    e.preventDefault();
+    swal({
+      title: "¿Estás seguro que quieres subir este archivo?",
+      text: "",
+      type: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Aceptar",
+      showLoaderOnConfirm: true,
+      closeOnConfirm: false,
+      cancelButtonText: "Cancelar",
+    }, function(isConfirm){
+      if(isConfirm){
+        subirAE();
+      }
+    });
+  });
+
+
 	$("#modalP").iziModal({
     history: false,
     overlayClose: false,
@@ -976,19 +1090,6 @@ $("#modalP, #modalD").on('click', 'header a', function(event) {
         $("#modalP .iziModal-content .icon-close").attr('style', '');
     }
 });
-    $(function() {
-        /*$("#expD").inputmask({
-            mask: "9999 / *{1,256} / *{1,256}",
-            greedy: false,
-            validator: "[A-Za-z0-9 ]"
-        });*/
-        $("#expD").inputmask("9999 *{1,256} *{1,256}", {"placeholder": "aaaa / cargo / institucion"});
-        $("#card").inputmask("9999 9999 9999 9999", {"placeholder": "0000 0000 0000 0000"});
-        $("#cvv").inputmask("999", {"placeholder": "000"});
-        $("#expdate").inputmask("99/9999", {"placeholder": "mm/aaaa"});
-        $("[data-mask]").inputmask();
-
-     });
     document.addEventListener("backbutton", function(e){
 
 
@@ -1043,21 +1144,7 @@ $("#modalP, #modalD").on('click', 'header a', function(event) {
 
       });
          paymentList();
-         $('#loginForm').submit(function(e){
-     e.preventDefault();
-     html = $(this).jqmData( "html" ) || "";
-      var form = new FormData($("#loginForm")[0]);
-      $.mobile.loading( "show", {
-            text: "Verificando",
-            textVisible: true,
-            theme: "b",
-            textonly: false,
-            html: html
-    });
-    login();
-      //form.append("regID",localStorage.getItem('registrationId'));
 
-  });
    $('#repForm').submit(function(e){
      e.preventDefault();
      if($(".chooseDT").val()!=""){
@@ -1174,61 +1261,6 @@ $("#modalP, #modalD").on('click', 'header a', function(event) {
        	swal("Error","Debes completar todos los campos","error");
        }
    });
-   	$("#datosForm").submit(function(e){
-    	e.preventDefault();
-		if(validaP()){
-		    swal({
-		      title: "¿Estás seguro que tus datos son correctos?",
-		      text: "",
-		      type: "info",
-		      showCancelButton: true,
-		      confirmButtonColor: "#DD6B55",
-		      confirmButtonText: "Aceptar",
-		      showLoaderOnConfirm: true,
-		      closeOnConfirm: false,
-		      cancelButtonText: "Cancelar",
-		    },
-		    function(isConfirm){
-		        if(isConfirm){
-			         updateD();
-		        }
-			});
-		}
-   	});
-
-   	function validaP(){
-        if($('#nombreU').val()==''){
-            swal("Error","El nombre no puede estar vacío.","error");
-        } else if($('#mailU').val()==''){
-            swal("Error","El correo no puede estar vacío.","error");
-        } else if($('#telU').val()==''){
-            swal("Error","El telefono no puede estar vacío.","error");
-        } else{
-            return true;
-        }
-    }
-
-    $("#datosdForm").submit(function(e){
-    	e.preventDefault();
-        if(validac()){
-            swal({
-                title: "¿Estás seguro que tus datos son correctos?",
-                text: "",
-                type: "info",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Aceptar",
-                showLoaderOnConfirm: true,
-                closeOnConfirm: false,
-                cancelButtonText: "Cancelar",
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    updateDD();
-                }
-            });
-        }
-    });
 
     function validac(){
     	if($('#tempE').val()==""){
@@ -1435,41 +1467,8 @@ var thisMonth = moment().format('YYYY-MM');
 	}
 	});
  });
-   $("#listg").click(function(e){
-   	e.preventDefault();
-   		html = $(this).jqmData( "html" ) || "";
- 	$.mobile.loading( "show", {
-            text: "Cargando Lista",
-            textVisible: true,
-            theme: "b",
-            textonly: false,
-            html: html
-    });
- 	$.ajax({
-	url: "http://www.icone-solutions.com/doct/sqlOP.php",
-	type: "POST",
-	data: {doctors:1},
-	success: function(data){
-		 $("#doctUl").empty();
-		var docts = jQuery.parseJSON(data);
-		for(var i=0;i<docts.length;i++){
-			$("#doctUl").append(' <li><a class="showD" data-doct="'+docts[i][4]+'">'+
-    	'<img src="http://icone-solutions.com/doct/images/'+docts[i][3]+'" />'+
-    	'<span class="dname">'+docts[i][0]+'</span>'+
-    	'<span class="scp">'+docts[i][1]+'</span>'+
-    	'<span class="scp">Consulta: $'+docts[i][2]+'</span>'+
-    	'</a>'+
-    	'</li>')
-		}
-		if ($("#doctUl").hasClass('ui-listview')) {
-			$("#doctUl").listview('refresh');
-		}
-		$.mobile.loading( "hide");
 
-		$.mobile.navigate( "#doctor_list", {transition:"slide" });
-	}
-	});
- });
+
 
  $('#np').click(function(e) {
  	e.preventDefault();
@@ -1562,25 +1561,4 @@ var thisMonth = moment().format('YYYY-MM');
        }
       });
    });
-
-
-
-
-   $('input[name="mpay"]').click(function() {
-       if($(this).val()=="t"){
-       	$("#cPay").show();
-       }else{
-       	$("#cPay").hide();
-       }
-     });
-
- $(function() {
-
-                $("#card").inputmask("9999 9999 9999 9999", {"placeholder": "0000 0000 0000 0000"});
-                $("#cvv").inputmask("999", {"placeholder": "000"});
-               $("#expdate").inputmask("99/9999", {"placeholder": "mm/aaaa"});
-
-
-            });
-
 });
