@@ -13,6 +13,47 @@ function login(){
   var form = new FormData($("#loginForm")[0]);
   //form.append("regID",localStorage.getItem('registrationId'));
   $.ajax({
+				type: "POST",
+				url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+				data: form,
+				crossDomain: true,
+				cache: false,
+				//beforeSend: function(){ $("#login").html('Connecting...');},
+				success: function(data){
+          $.mobile.loading( "hide" );
+
+					if(data.toString()!=="0"){
+						/*localStorage.login="true";
+						localStorage.email=email;
+						window.location.href = "index.html";*/
+            var datos = data.toString().split(",");
+            user = datos[0];
+            usi = datos[1];
+            per = datos[3];
+            //$(".usern").text(user);
+            localStorage.setItem("user",user);
+            localStorage.setItem("usi",usi);
+            if($("#tipoL").val()=="1"){
+              localStorage.setItem("tipo","adm");
+              $.mobile.navigate( "#menu", { transition : "slide",info: "info about the #foo hash" });
+            }else if($("#tipoL").val()=="2"){
+              localStorage.setItem("tipo","esc");
+              $.mobile.navigate( "#menuD", { transition : "slide",info: "info about the #foo hash" });
+            } else if($("#tipoL").val()=="3"){
+              localStorage.setItem("tipo","lec");
+              $.mobile.navigate( "#menuL", { transition : "slide",info: "info about the #foo hash" });
+            }
+					} else {
+						/*alert("Login error");
+						$("#login").html('Login');*/
+            swal("Error","Usuario o contraseña incorrectos","error");
+					}
+				}, error: function(){
+          $.mobile.loading( "hide");
+          swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
+        }
+			});
+  /*$.ajax({
      url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
      type: "POST",
      data: form,
@@ -49,7 +90,7 @@ function login(){
        $.mobile.loading( "hide");
        swal("Error","Actualmente tu dispositivo no cuenta con una conexión a internet","error");
      }
-   });
+   });*/
 }
 
 //función agregar usuarios a BD
