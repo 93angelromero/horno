@@ -897,141 +897,7 @@ $('#modalD').iziModal('open');
     }
 
 $(document).ready(function(){
-  //inicio de sesiones
-  $('#loginForm').submit(function(e){
-    e.preventDefault();
-    html = $(this).jqmData( "html" ) || "";
-    var form = new FormData($("#loginForm")[0]);
-    $.mobile.loading( "show", {
-      text: "Verificando",
-      textVisible: true,
-      theme: "b",
-      textonly: false,
-      html: html
-    });
-    login();
-    //form.append("regID",localStorage.getItem('registrationId'));
-  });
-
-  //agregar Usuarios
-  $("#datosForm").submit(function(e){
-    e.preventDefault();
-    if(validaP()){
-      swal({
-        title: "¿Estás seguro que tus datos son correctos?",
-        text: "",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Aceptar",
-        showLoaderOnConfirm: true,
-        closeOnConfirm: false,
-        cancelButtonText: "Cancelar",
-      },
-      function(isConfirm){
-          if(isConfirm){
-             updateD();
-          }
-      });
-    }
-  });
-
-  //validación de campos
-  function validaP(){
-      if($('#nombreU').val()==''){
-          swal("Error","El nombre no puede estar vacío.","error");
-      } else if($('#mailU').val()==''){
-          swal("Error","El correo no puede estar vacío.","error");
-      } else if($('#telU').val()==''){
-          swal("Error","El telefono no puede estar vacío.","error");
-      } else{
-          return true;
-      }
-  }
-
-  //Mostrar datos de los usuarios en Base de Datos
-  $("#usersL").click(function(e){
-    e.preventDefault();
-  	html = $(this).jqmData( "html" ) || "";
-    $.mobile.loading( "show", {
-      text: "Cargando Lista",
-      textVisible: true,
-      theme: "b",
-      textonly: false,
-      html: html
-    });
-	  $.ajax({
-      url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
-   	  type: "POST",
-  	  data: {users:1},
-   	  success: function(data){
-        $("#usersUl").empty();
-     		var users = jQuery.parseJSON(data);
-     		for(var i=0;users.length;i++){
-          $("#usersUl").append(' <li><a class="showD" data-doct="'+docts[i][3]+'">'+
-          '<span class="dname">'+docts[i][0]+'</span>'+
-          '<span class="scp">'+docts[i][1]+'</span>'+
-          '<span class="scp">Permiso'+docts[i][2]+'</span>'+
-          '</a>'+
-          '</li>')
-     		}
- 	      if ($("#usersUl").hasClass('ui-listview')) {
-          $("#usersUl").listview('refresh');
-        }
- 	      $.mobile.loading( "hide");
- 	      $.mobile.navigate( "#verU", {transition:"slide" });
-      }
- 	  });
-  });
-
-  //modificar usuarios
-
-
-  //agregar estados a BD
-  $("#datosdForm").submit(function(e){
-    e.preventDefault();
-    if(validac()){
-      swal({
-        title: "¿Estás seguro que tus datos son correctos?",
-        text: "",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Aceptar",
-        showLoaderOnConfirm: true,
-        closeOnConfirm: false,
-        cancelButtonText: "Cancelar",
-      },
-      function(isConfirm){
-        if(isConfirm){
-          updateDD();
-        }
-      });
-    }
-  });
-
-  //agregar archivos de estados a BD
-  $('#archivoeForm').submit(funtion(e){
-    e.preventDefault();
-    swal({
-      title: "¿Estás seguro que quieres subir este archivo?",
-      text: "",
-      type: "info",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Aceptar",
-      showLoaderOnConfirm: true,
-      closeOnConfirm: false,
-      cancelButtonText: "Cancelar",
-    }, function(isConfirm){
-      if(isConfirm){
-        subirAE();
-      }
-    });
-  });
-
-
-	$("#modalP").iziModal({
+  $("#modalP").iziModal({
     history: false,
     overlayClose: false,
     width: 600,
@@ -1185,6 +1051,139 @@ $("#modalP, #modalD").on('click', 'header a', function(event) {
 
       });
          paymentList();
+
+         //inicio de sesiones
+         $('#loginForm').submit(function(e){
+           e.preventDefault();
+           html = $(this).jqmData( "html" ) || "";
+           var form = new FormData($("#loginForm")[0]);
+           $.mobile.loading( "show", {
+             text: "Verificando",
+             textVisible: true,
+             theme: "b",
+             textonly: false,
+             html: html
+           });
+           login();
+           //form.append("regID",localStorage.getItem('registrationId'));
+         });
+
+         //agregar Usuarios
+         $("#datosForm").submit(function(e){
+           e.preventDefault();
+           if(validaP()){
+             swal({
+               title: "¿Estás seguro que tus datos son correctos?",
+               text: "",
+               type: "info",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Aceptar",
+               showLoaderOnConfirm: true,
+               closeOnConfirm: false,
+               cancelButtonText: "Cancelar",
+             },
+             function(isConfirm){
+                 if(isConfirm){
+                    updateD();
+                 }
+             });
+           }
+         });
+
+         //validación de campos
+         function validaP(){
+             if($('#nombreU').val()==''){
+                 swal("Error","El nombre no puede estar vacío.","error");
+             } else if($('#mailU').val()==''){
+                 swal("Error","El correo no puede estar vacío.","error");
+             } else if($('#telU').val()==''){
+                 swal("Error","El telefono no puede estar vacío.","error");
+             } else{
+                 return true;
+             }
+         }
+
+         //Mostrar datos de los usuarios en Base de Datos
+         $("#usersL").click(function(e){
+           e.preventDefault();
+         	html = $(this).jqmData( "html" ) || "";
+           $.mobile.loading( "show", {
+             text: "Cargando Lista",
+             textVisible: true,
+             theme: "b",
+             textonly: false,
+             html: html
+           });
+       	  $.ajax({
+             url: "https://www.icone-solutions.com/tesisL/sqlOP.php",
+          	  type: "POST",
+         	  data: {users:1},
+          	  success: function(data){
+               $("#usersUl").empty();
+            		var users = jQuery.parseJSON(data);
+            		for(var i=0;users.length;i++){
+                 $("#usersUl").append(' <li><a class="showD" data-doct="'+docts[i][3]+'">'+
+                 '<span class="dname">'+docts[i][0]+'</span>'+
+                 '<span class="scp">'+docts[i][1]+'</span>'+
+                 '<span class="scp">Permiso'+docts[i][2]+'</span>'+
+                 '</a>'+
+                 '</li>')
+            		}
+        	      if ($("#usersUl").hasClass('ui-listview')) {
+                 $("#usersUl").listview('refresh');
+               }
+        	      $.mobile.loading( "hide");
+        	      $.mobile.navigate( "#verU", {transition:"slide" });
+             }
+        	  });
+         });
+
+         //modificar usuarios
+
+
+         //agregar estados a BD
+         $("#datosdForm").submit(function(e){
+           e.preventDefault();
+           if(validac()){
+             swal({
+               title: "¿Estás seguro que tus datos son correctos?",
+               text: "",
+               type: "info",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Aceptar",
+               showLoaderOnConfirm: true,
+               closeOnConfirm: false,
+               cancelButtonText: "Cancelar",
+             },
+             function(isConfirm){
+               if(isConfirm){
+                 updateDD();
+               }
+             });
+           }
+         });
+
+         //agregar archivos de estados a BD
+         $('#archivoeForm').submit(funtion(e){
+           e.preventDefault();
+           swal({
+             title: "¿Estás seguro que quieres subir este archivo?",
+             text: "",
+             type: "info",
+             showCancelButton: true,
+             confirmButtonColor: "#DD6B55",
+             confirmButtonText: "Aceptar",
+             showLoaderOnConfirm: true,
+             closeOnConfirm: false,
+             cancelButtonText: "Cancelar",
+           }, function(isConfirm){
+             if(isConfirm){
+               subirAE();
+             }
+           });
+         });
 
    $('#repForm').submit(function(e){
      e.preventDefault();
