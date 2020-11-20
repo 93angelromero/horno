@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 $('#loginForm').submit(function(){
 	var email = $("#user").val();
 	var pass = $('#contra').val();
@@ -23,31 +22,4 @@ $('#loginForm').submit(function(){
 		});
 	}
 	return false;
-=======
-$('#loginForm').submit(function(){
-	var email = $("#user").val();
-	var pass = $('#contra').val();
-	var dataString="email="+email+"&password="+pass+"&login=";
-	if($.trim(email).length>0 && $.trim(pass).length>0){
-		$.ajax({
-			type: "POST",
-			url: "http://www.icone-solutions.com/doct/sqlOP.php",
-			data: dataString,
-			crossDomain: true,
-			cache: false,
-			beforeSend: function(){ $("#inicio").html('Conectando...');},
-			success: function(data){
-				if(data=="success"){
-					localStorage.login="true";
-					localStorage.email=email;
-					window.location.href = "index.html";
-				} else if (data=="failed"){
-					alert("Error al entrar");
-					$("#inicio").html('Inicio');
-				}
-			}
-		});
-	}
-	return false;
->>>>>>> 4ebff2e40f740479dc3a1c1fb9673140892599a2
-});
+}
