@@ -39,15 +39,8 @@
         <h1 class="regt">BIENVENIDO</h1>
         <div class="ui-content shadowu">
           <form id="loginForm">
-            <input type="email" class="inputg" placeholder="Correo" data-clear-btn="true" name="user"  value="" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" title="El formato debe ser de la forma: ejemplo@ejemplo.com">
-            <br />
-            <select id="tipoL" name="tipo">
-            	<option value="1">Administrador</option>
-                <option value="2">Acceso 1</option>
-      	        <option value="3">Acceso 2</option>
-            </select>
-            <br />
-            <input type="password" class="inputg" placeholder="Contraseña" data-clear-btn="true" name="pass"  value="">
+            <input type="email" class="inputg" placeholder="Correo" data-clear-btn="true" name="user"  value="" required pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" title="El formato debe ser de la forma: ejemplo@ejemplo.com">
+            <input type="password" class="inputg" placeholder="Contraseña" data-clear-btn="true" name="pass" required  value="">
             <br />
             <center><input  type="submit" class="gbutton sched" data-role="none" value="Entrar"></center>
           </form>
@@ -996,6 +989,7 @@
   <script src="js/es.js"></script>
   <script type="text/javascript" src="js/fullcalendar.min.js"></script>
   <script src="js/jquery.datetimepicker.full.min.js"></script>
+  <script type="text/javascript" src="js/login.js"></script>
   <script type="text/javascript" src="js/operations.js"></script>
   <script type="text/javascript" src="js/vals.js"></script>
   <script type="text/javascript">

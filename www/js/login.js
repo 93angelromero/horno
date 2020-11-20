@@ -1,12 +1,11 @@
 $('#loginForm').submit(function(){
 	var email = $("#user").val();
 	var pass = $('#contra').val();
-	var dataString="email="+email+"&password="+pass+"&login=";
 	if($.trim(email).length>0 && $.trim(pass).lenth>0){
 		$.ajax({
 			type: "POST",
-			url: "http://www.icone-solutions.com/doct/sqlOP.php",
-			data: dataString,
+			url: "http://localhost/tesisL/sqlOP.php",
+			data: { email, pass, op: '1l' },
 			crossDomain: true,
 			cache: false,
 			beforeSend: function(){ $("#inicio").html('Conectando...');},
